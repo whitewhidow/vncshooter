@@ -25,7 +25,7 @@ while read p; do
   #break
   if (( $count % 500 == 0 ))           # no need for brackets
   then
-    sleep 10s
+    sleep 30s
   fi
   count=$((count+1))
 done <$1
