@@ -1,9 +1,9 @@
 # vncshooter & vncshitter
 
 
-**vncshooter** will parse a textfile containing target ip's, extract all ip's, attempt to connect to the target and take a screenshot. (requires tor, proxychains, vncsnapshot)
+**vncshooter** will parse a textfile, extract all ip's, attempt to connect to the target via a vnc connection and anonymously take a screenshot. (requires tor, proxychains, vncsnapshot)
 
-**vncshitter** can automatically place a reverse shell on a target, by sending keystrokes over a vnc connection (requires vncdotool)
+**vncshitter** can automatically place a reverse shell on a target, by anonymously sending keystrokes over a vnc connection (requires tor, proxychains, vncdotool)
 
 
 
